@@ -80,10 +80,10 @@ jobs:
 
           for SERVICE in auth gateway orders order-service product-service user-service; do
             MANIFEST="gitops/k8s/backend/${SERVICE}.yml"
-            sed -i "s|${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${SERVICE}:.*|${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${SERVICE}:${NEW_TAG}|g" $MANIFEST
+            sed -i -E "s|(\bimage:.*amazonaws\.com/${SERVICE}:)[a-f0-9]+|\1${NEW_TAG}|g" "$MANIFEST"
           done
 
-          sed -i "s|${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/frontend:.*|${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/frontend:${NEW_TAG}|g" gitops/k8s/frontend/deployment.yml
+          sed -i -E "s|(\bimage:.*amazonaws\.com/frontend:)[a-f0-9]+|\1${NEW_TAG}|g" gitops/k8s/frontend/deployment.yml
 
 
 
